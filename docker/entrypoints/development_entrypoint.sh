@@ -12,7 +12,6 @@
 # https://creativecommons.org/licenses/by/4.0/
 # ---------------------------------------------------------------------------
 
-# Exit immediately if a command exits with a non-zero status
 set -e
 
 # Install Rosemary
@@ -26,9 +25,8 @@ sh ./scripts/init-testing-db.sh
 
 # Initialize migrations only if the migrations directory doesn't exist
 if [ ! -d "migrations/versions" ]; then
-    # Initialize the migration repository
-    flask db init
-    flask db migrate
+    python -m flask db init
+    python -m flask db migrate
 fi
 
 # Check if the database is empty
@@ -42,7 +40,7 @@ if [ $(mariadb -u $MARIADB_USER -p$MARIADB_PASSWORD -h $MARIADB_HOSTNAME -P $MAR
     echo "Latest revision: $LATEST_REVISION"
 
     # Run the migration process to apply all database schema changes
-    flask db upgrade
+    python -m flask db upgrade
 
     # Seed the database with initial data
     rosemary db:seed -y
@@ -51,17 +49,14 @@ else
 
     echo "Database already initialized, updating migrations..."
 
-    # Get the current revision to avoid duplicate stamp
     CURRENT_REVISION=$(mariadb -u $MARIADB_USER -p$MARIADB_PASSWORD -h $MARIADB_HOSTNAME -P $MARIADB_PORT -D $MARIADB_DATABASE -sse "SELECT version_num FROM alembic_version LIMIT 1;")
     
     if [ -z "$CURRENT_REVISION" ]; then
-        # If no current revision, stamp with the latest revision
-        flask db stamp head
+        python -m flask db stamp head
     fi
 
-    # Run the migration process to apply all database schema changes
-    flask db upgrade
+    python -m flask db upgrade
 fi
 
-# Start the Flask application with specified host and port, enabling reload and debug mode
-exec flask run --host=0.0.0.0 --port=5000 --reload --debug
+# Start the Flask application with specified host and port
+exec python -m flask run --host=0.0.0.0 --port=5000 --reload --debug
