@@ -1,0 +1,5 @@
+FROM nginx:1.29.1
+
+# Copy custom nginx config
+COPY docker/nginx/nginx.dev.conf /etc/nginx/nginx.conf
+COPY docker/nginx/html/* /usr/share/nginx/html

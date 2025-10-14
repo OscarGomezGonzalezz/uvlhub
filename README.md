@@ -16,3 +16,17 @@ Repository of feature models in UVL format integrated with Zenodo and flamapy fo
 ## Official documentation
 
 You can consult the official documentation of the project at [docs.uvlhub.io](https://docs.uvlhub.io/)
+
+
+## Custom DB Creation:
+
+````
+CREATE DATABASE uvlhubdb;
+CREATE DATABASE uvlhubdb_test;
+CREATE USER 'uvlhubdb_user'@'localhost' IDENTIFIED BY 'uvlhubdb_password';
+GRANT ALL PRIVILEGES ON uvlhubdb.* TO 'uvlhubdb_user'@'%' IDENTIFIED BY 'uvlhubdb_password';
+GRANT ALL PRIVILEGES ON uvlhubdb_test.* TO 'uvlhubdb_user'@'%' IDENTIFIED BY 'uvlhubdb_password';
+FLUSH PRIVILEGES;
+EXIT;
+
+````
