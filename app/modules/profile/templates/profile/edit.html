@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <h1 class="h3 mb-3">Edit profile</h1>
+    <h1 class="h3 mb-3">Personal Information</h1>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -120,6 +120,28 @@
         </div>
 
     </div>
+
+  <!-- Columna derecha: seguridad -->
+  <div class="col-12 col-lg-6">
+    <h1 class="h3 mb-3 mt-3">Security</h1>
+
+    <div class="card">
+      <div class="card-body">
+        <p><strong>Two-Factor Authentication (2FA):</strong></p>
+        {% if current_user.otp_secret %}
+          <p>2FA is <span class="text-success fw-bold">enabled</span>.</p>
+          {% if session.qr_b64 %}
+  <img src="data:image/png;base64,{{ session.qr_b64 }}" alt="QR Code">
+{% endif %}
+          <a href="{{ url_for('profile.disable_2fa') }}" class="btn btn-danger btn-sm">Disable 2FA</a>
+        {% else %}
+          <p>2FA is <span class="text-danger fw-bold">disabled</span>.</p>
+          <a href="{{ url_for('profile.enable_2fa') }}" class="btn btn-success btn-sm">Enable 2FA</a>
+        {% endif %}
+        
+      </div>
+    </div>
+  </div>
 
 {% endblock %}
 

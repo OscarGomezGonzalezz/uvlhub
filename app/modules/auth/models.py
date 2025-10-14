@@ -4,7 +4,6 @@ from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
-import pyotp
 
 
 class User(db.Model, UserMixin):
@@ -38,10 +37,3 @@ class User(db.Model, UserMixin):
 
         return AuthenticationService().temp_folder_by_user(self)
     
-    # key = pyotp.random_base32()
-
-    # totp = pyotp.TOTP(key)
-    # code = totp.now()
-    # input_code = input("Enter 2FA Code:")
-    # totp.verify(input_code)
-    # print(key)
